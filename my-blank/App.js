@@ -1,38 +1,45 @@
 /* Zona 1: importaciones */
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import BottomSheet from '@gorhom/bottom-sheet';
-import React,{useState} from 'react';
-
-const Texto=(props)=>{
-  const {style}=props
-  const [contenido,setContenido]=useState("Hola Mundo React")
-  const actualizarTexto=()=>{setContenido('Estado actualizado')}
-  return(
-    <Text style={[styles.text, style]} onPress={actualizarTexto}>{contenido}</Text>
-  )
-}
+import { useState } from 'react';
+import { StyleSheet, Text, View, Switch } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 /* Zona 2: Main */
 export default function App() {
-  const bottomSheetRef = useRef(null)
-
-  // Puntos de interrupción (snap points)
-  const snapPoints = useMemo(() => ['25%', '50%'], [])
-
+  const [activarSwitch, setActivarSwitch] = useState(false);
+  const [modoOscuro, setModoOscuro] = useState(false);
   return (
-    <View style={styles.container}>
-      <Texto style={styles.red}></Texto>
-      <Texto style={styles.green}></Texto>
-      <Texto style={styles.blue}></Texto>
-      <Button title="Abrir Bottom Sheet" onPress={() => bottomSheetRef.current?.expand()}/>
-      <BottomSheet ref={bottomSheetRef} index={-1} snapPoints={snapPoints}>
-        <View style={styles.bottomSheet}>
-          <Text>Hola desde el Bottom Sheet!</Text>
+    <SafeAreaProvider>
+      <SafeAreaView style={[styles.contenedor, modoOscuro && styles.fondoOscuro]}>
+        {/* Aqui van los componentes */}
+        <Text style={[styles.titulo, modoOscuro && styles.textoClaro]}>Práctica con Switchs</Text>
+        <View style={styles.opcion}>
+          <Text style={[styles.etiqueta, modoOscuro && styles.textoClaro]}>Activar Switch 2</Text>
+          <Switch
+          value={activarSwitch}
+          onValueChange={setActivarSwitch}
+          trackColor={{false: '#ccc', true: '#4caf50'}}
+          thumbColor={activarSwitch?'#ffffff':'#999999'}
+          ></Switch>
         </View>
-      </BottomSheet>
-      <StatusBar style="auto" />
-    </View>
+        <View style={styles.opcion}>
+          <Text style={[styles.etiqueta, modoOscuro && styles.textoClaro]}>Modo oscuro</Text>
+          <Switch
+          value={modoOscuro}
+          onValueChange={setModoOscuro}
+          trackColor={
+            !activarSwitch?{false:'#ff9999', true: '#ff3b30'}: {false: '#ccc', true: '#4caf50'}
+          }
+          thumbColor={
+            !activarSwitch
+            ?'#ff3b30':
+            modoOscuro
+            ?'#ffffff'
+            :'#999999'
+          }></Switch>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -45,15 +52,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column'
   },
-  text: {
-    color: 'green',
-    fontSize: 20,
-  },
-  red: {backgroundColor: 'red'},
-  green: {backgroundColor: 'green'},
-  blue: {backgroundColor: 'blue'},
-  bottomSheet: {
+  contenedor: {
     flex: 1,
+    background: '#ffffff',
+    paddingHorizontal: 30,
+    justifyContent: 'center',
+  },
+  titulo: {
+    fontSize: 24,
+    marginBottom: 40,
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  fondoOscuro: {
+    backgroundColor: '#1a1a1a',
+  },
+  textoClaro: {
+    color: '#ffffff',
+  },
+  opcion: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 30,
     alignItems: 'center',
   },
+  etiqueta: {
+    fontSize: 18,
+  }
 });
