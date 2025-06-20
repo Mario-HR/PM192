@@ -1,59 +1,51 @@
-/* Zona 1: importaciones */
 import { StatusBar } from 'expo-status-bar';
-import { use, useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert, TouchableOpacity, Image } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 
-/* Zona 2: Main */
 export default function App() {
-  const [botonDesactivado,setBotonDesactivado]=useState(false);
-  const [contador,setContador]=useState(0);
+  const [nombre,setNombre]=useState('');
+
+  const mostrarAlerta=()=>{
+    if (nombre.trim()===''){
+      Alert.alert('error', 'Por favor escribe algo');
+      alert('Escribe algo');
+    }else{
+      Alert.alert('Bienvenido', `Hola ${nombre}, bienbenido a nuestra app`);
+      alert(`Hola ${nombre}, bienbenido a nuestra app`);
+    }
+  }
   return (
-    <View>
-      <Button title="Presioname" color='#841584' onPress={()=>alert('Me has presionado')}></Button>
-      <Button
-      title={botonDesactivado ? 'Desactivado':'Desactivame'}
-      disabled={botonDesactivado}
-      onPress={()=>setBotonDesactivado(true)}
-      >
-      </Button>
-      <View style={styles.contenedor}>
-        <Button title="Izquierda" color='#674323'></Button>
-        <Button title="Derecha" color='#097865'></Button>
-      </View>
-      <TouchableOpacity style={styles.dynamicButton} onPress={()=>setContador(contador+1)}>
-        <Text style={styles.dynamicText}>{contador}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={()=>alert('La pokebola ha sido presionada')}>
-        <Image source={require('./assets/pokebola.png')} style={styles.imagen}></Image>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <Text style={styles.text}>Ingresa tu nombre</Text>
+      <TextInput style={styles.input}
+      placeholder='Escribe tu nombre'
+      onChangeText={setNombre}
+      value={nombre}>
+      </TextInput>
+      <Button title='Enviar' onPress={mostrarAlerta}></Button>
     </View>
   );
 }
 
-/* Zona 3: Estilos */
 const styles = StyleSheet.create({
-  contenedor: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  boton: {
-    marginTop: 10,
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
     alignItems: 'center',
-    backgroundColor: '#234354'
+    justifyContent: 'center',
   },
-  textoBoton: {
-    color: '#124354',
+  text: {
     fontSize: 18,
+    marginBottom: 10,
+    color: '#000',
   },
-  imagen: {
-    width: 100,
-    height: 100,
-  },
-  dynamicButton: {
-    padding: 10,
-    marginTop: 10,
-    backgroundColor: '#987867',
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding:10,
+    marginBottom: 20,
     borderRadius: 5,
-    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    color: '#000',
   }
 });
