@@ -1,51 +1,64 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+
+const FondoBienvenida = () => {
+  return(
+    <ImageBackground source={require('./assets/fondo.jpg')} style={styles.fondo}>
+      <View style={styles.contenido}>
+        <Text style={styles.titulo}>¡Bienvenido a la App!</Text>
+      </View>
+    </ImageBackground>
+  );
+};
 
 export default function App() {
-  const [nombre,setNombre]=useState('');
-
-  const mostrarAlerta=()=>{
-    if (nombre.trim()===''){
-      Alert.alert('error', 'Por favor escribe algo');
-      alert('Escribe algo');
-    }else{
-      Alert.alert('Bienvenido', `Hola ${nombre}, bienbenido a nuestra app`);
-      alert(`Hola ${nombre}, bienbenido a nuestra app`);
-    }
-  }
+  const [showSplash, setShowSplash] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 5000);
+    return() => clearTimeout(timer);
+  }, []);
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Ingresa tu nombre</Text>
-      <TextInput style={styles.input}
-      placeholder='Escribe tu nombre'
-      onChangeText={setNombre}
-      value={nombre}>
-      </TextInput>
-      <Button title='Enviar' onPress={mostrarAlerta}></Button>
-    </View>
+    <SafeAreaView styleL={styles.container}>
+      {showSplash ? (
+        <FondoBienvenida/>
+      ):(
+        <View style={styles.mainContent}>
+          <Text style={styles.mainText}>Pantalla principal</Text>
+        </View>
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+  },
+  fondo: {
+    flex: 1,
+  },
+  contenido: {
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
-  text: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: '#000',
+  titulo: {
+    fontSize: 28,
+    color: 'white',
+    fontWeight: 'bold',
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding:10,
-    marginBottom: 20,
-    borderRadius: 5,
-    backgroundColor: '#f9f9f9',
-    color: '#000',
+  mainContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mainText: {
+    fontSize: 24,
+    fontWeight: 'bold',
   }
 });
+
